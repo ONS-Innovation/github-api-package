@@ -47,3 +47,21 @@ To deactivate the virtual environment, use:
 ```bash 
 deactivate
 ```
+
+## Documentation
+
+This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.
+
+To update the GitHub Pages deployment:
+
+1. Build the MkDocs Site
+
+```bash
+mkdocs build
+```
+
+2. Rename the /site directory mkdocs_deployment
+
+For more information about MkDocs, see the below documentation.
+
+[Getting Started with MkDocs](https://www.mkdocs.org/getting-started/)
