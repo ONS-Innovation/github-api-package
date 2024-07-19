@@ -313,6 +313,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#to-update-the-github-pages-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      To update the GitHub Pages deployment:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -398,6 +422,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#to-update-the-github-pages-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      To update the GitHub Pages deployment:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -442,6 +490,30 @@
 <p>To deactivate the virtual environment, use: 
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>deactivate
 </span></code></pre></div></p>
+<h2 id="documentation">Documentation</h2>
+<p>This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.</p>
+<p>For more information about MkDocs, see the below documentation.</p>
+<p><a href="https://www.mkdocs.org/getting-started/">Getting Started with MkDocs</a></p>
+<h3 id="to-update-the-github-pages-deployment">To update the GitHub Pages deployment:</h3>
+<ol>
+<li>
+<p>Delete the old /mkdocs_deployment directory.</p>
+</li>
+<li>
+<p>Build the MkDocs Site.</p>
+</li>
+</ol>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>mkdocs<span class="w"> </span>build
+</span></code></pre></div>
+<ol>
+<li>
+<p>Rename the /site directory to /mkdocs_deployment.</p>
+</li>
+<li>
+<p>Push changes to GitHub.</p>
+</li>
+</ol>
+<p>Once the changes are pushed, <code>deploy_mkdocs.yml</code> will be executed through GitHub Actions. This will deploy the /mkdocs_deployment to GitHub Pages.</p>
 
 
 
