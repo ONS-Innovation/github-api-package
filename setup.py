@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='github-api-toolkit',
+    name='github_api_toolkit',
     version='0.1.0',
     description='A toolkit for interacting with the GitHub API',
     url='https://github.com/ONS-Innovation/code-github-api-package',
