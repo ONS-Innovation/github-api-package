@@ -3,7 +3,7 @@ site_name: GitHub API Package
 nav:
   - Home: 'index.md'
   - Getting Started: 'readme.md'
-  - Test: 'test.md'
+
 theme:
   name: material
   palette:
