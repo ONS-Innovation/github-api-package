@@ -137,7 +137,7 @@ class github_interface():
         """
         if add_prefix:
             url = "https://api.github.com" + url
-        return self.handle_response(requests.patch(url=url, headers=self.headers, params=params))
+        return self.handle_response(requests.patch(url=url, headers=self.headers, json=params))
     
     def post(self, url: str, params: dict = {}, add_prefix: bool = True) -> requests.Response | Exception:
         """Performs a post request using the passed url.
@@ -154,4 +154,4 @@ class github_interface():
         """
         if add_prefix:
             url = "https://api.github.com" + url
-        return self.handle_response(requests.post(url=url, headers=self.headers, params=params))
+        return self.handle_response(requests.post(url=url, headers=self.headers, json=params))
