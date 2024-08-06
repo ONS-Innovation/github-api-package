@@ -55,19 +55,3 @@ This project uses MkDocs for documentation which gets deployed to GitHub Pages a
 For more information about MkDocs, see the below documentation.
 
 [Getting Started with MkDocs](https://www.mkdocs.org/getting-started/)
-
-### To update the GitHub Pages deployment:
-
-1. Delete the old /mkdocs_deployment directory.
-
-2. Build the MkDocs Site.
-
-```bash
-mkdocs build
-```
-
-3. Rename the /site directory to /mkdocs_deployment.
-
-4. Push changes to GitHub.
-
-Once the changes are pushed, `deploy_mkdocs.yml` will be executed through GitHub Actions. This will deploy the /mkdocs_deployment to GitHub Pages.
