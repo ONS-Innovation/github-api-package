@@ -1,15 +1,22 @@
 site_name: GitHub API Package
 
+repo_url: https://github.com/ONS-Innovation/github-api-package
+repo_name: GitHub API Package
+
 nav:
   - Home: 'index.md'
-  - Getting Started: 'readme.md'
-
 theme:
   name: material
   palette:
     scheme: slate
   features:
     - content.code.copy
+
+  logo: ./branding/ONS_Logo_Digital_Colour_Landscape_Bilingual_RGB.png
+  favicon: ./branding/ONS-symbol_digital.svg
+
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
   - pymdownx.highlight:
