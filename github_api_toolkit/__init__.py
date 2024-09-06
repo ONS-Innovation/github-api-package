@@ -155,3 +155,143 @@ class github_interface():
         if add_prefix:
             url = "https://api.github.com" + url
         return self.handle_response(requests.post(url=url, headers=self.headers, json=params))
+
+class github_graphql_interface():
+    """A class used to interact with the GitHub GraphQL API. Has a set range of functions.
+    """
+    
+    def __init__(self, token: str) -> None:
+        self.headers = { "Authorization": "token " + token }
+        self.api_url = "https://api.github.com/graphql"
+
+    def get_domain_email_by_user(self, username: str, org: str) -> list | tuple:
+        """Gets a GitHub user's verified domain email for a specific organization.
+
+        Args:
+            username (str): The GitHub username of the user.
+            org (str): The GitHub organization name.
+
+        Returns:
+            list | tuple: A list of verified domain emails for the user in the organization or a tuple containing an error message and status code.
+        """
+        
+        self.query = '''
+            query ($username: String!, $org: String!) {
+                user (login: $username) {
+                    login
+                    organizationVerifiedDomainEmails(login: $org)
+                }
+            }
+        '''
+
+        self.params = {
+            'username': username,
+            'org': org
+        }
+
+        self.json = { 
+            'query' : self.query,
+            'variables' : self.params
+        }
+
+        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+
+        if response.status_code == 200:
+            return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
+        else:
+            response_json = response.json()
+            return response_json["message"], response_json["status"]
+        
+    def get_codeowner_teams(self, org: str, repo: str) -> list | tuple:
+        """Gets the CODEOWNERS file from a GitHub repository and returns the teams listed in the file.
+
+        Args:
+            org (str): the GitHub organization name.
+            repo (str): the GitHub repository name.
+
+        Returns:
+            list | tuple: A list of teams listed in the CODEOWNERS file or a tuple containing an error message and status code.
+        """
+
+        self.query = '''
+            query ($org: String!, $repo: String!) {
+                repository(owner: $org, name: $repo) {
+                    file: object(expression: "main:CODEOWNERS") {
+                        ... on Blob {
+                            text
+                        }
+                    }
+                }
+            }
+        '''
+
+        self.params = {
+            'org': org,
+            'repo': repo
+        }
+
+        self.json = {
+            'query': self.query,
+            'variables': self.params
+        }
+
+        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+
+        if response.status_code == 200:
+            codeowners_contents = response.json()["data"]["repository"]["file"]["text"]
+
+            codeowners = codeowners_contents.split("\n")
+
+            if codeowners[-1] == "":
+                codeowners.pop()
+
+            for i in range(len(codeowners)):
+                codeowners[i] = codeowners[i].split("/")[-1]
+
+            return codeowners
+        else:
+            response_json = response.json()
+            return response_json["message"], response_json["status"]
+        
+    def get_team_maintainers(self, org: str, team_name: str) -> list | tuple:
+        """Gets the maintainers of a GitHub team.
+
+        Args:
+            org (str): the GitHub organization name.
+            team_name (str): the GitHub team name.
+
+        Returns:
+            list | tuple: A list of maintainers in the team or a tuple containing an error message and status code.
+        """
+
+        self.query = '''
+            query ($org: String!, $team_name: String!) {
+                organization(login: $org) {
+                    team(slug: $team_name) {
+                        members(role: MAINTAINER) {
+                            nodes {
+                                login
+                            }
+                        }
+                    }
+                }
+            }
+        '''
+
+        self.params = {
+            'org': org,
+            'team_name': team_name
+        }
+
+        self.json = {
+            'query': self.query,
+            'variables': self.params
+        }
+
+        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+
+        if response.status_code == 200:
+            return response.json()["data"]["organization"]["team"]["members"]["nodes"]
+        else:
+            response_json = response.json()
+            return response_json["message"], response_json["status"]

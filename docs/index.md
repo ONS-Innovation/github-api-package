@@ -4,6 +4,8 @@
 
 This project is a supporting package for tools which need to access the GitHub RESTful API. It includes a function to authenticate requests as a GitHub App installation and a class which allows Get, Patch and Post requests to be made easily.
 
+The project also has a class to interact with GitHub's GraphQL API. This class has a set range of functions to suit ONS' processes.
+
 This package is primarily used by:
 
 - [GitHub Repository Archive Tool](https://github.com/ONS-Innovation/github-repository-archive-tool)
