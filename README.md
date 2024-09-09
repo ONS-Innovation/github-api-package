@@ -48,6 +48,10 @@ To deactivate the virtual environment, use:
 deactivate
 ```
 
+## Commands
+
+Please view the MkDocs documentation for more information about the toolkit's classes and functions.
+
 ## Documentation
 
 This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.

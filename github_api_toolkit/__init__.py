@@ -43,8 +43,6 @@ def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -
 
     # Get Installation ID
     header = {"Authorization": f"Bearer {encoded_jwt}"}
-
-    response = requests.get(url=f"https://api.github.com/orgs/{org}/installation", headers=header)
     
     try:
         response = requests.get(url=f"https://api.github.com/orgs/{org}/installation", headers=header)
@@ -164,6 +162,24 @@ class github_graphql_interface():
         self.headers = { "Authorization": "token " + token }
         self.api_url = "https://api.github.com/graphql"
 
+    def make_ql_request(self, query: str, params: dict) -> requests.Response:
+        """Makes a request to the GitHub GraphQL API.
+
+        Args:
+            query (str): The GraphQL query to be executed.
+            params (dict): A dictionary containing the variables for the query.
+
+        Returns:
+            requests.Response: The response from the API endpoint.
+        """
+
+        self.json = {
+            'query': query,
+            'variables': params
+        }
+
+        return requests.post(url=self.api_url, json=self.json, headers=self.headers)
+
     def get_domain_email_by_user(self, username: str, org: str) -> list | tuple:
         """Gets a GitHub user's verified domain email for a specific organization.
 
@@ -189,12 +205,7 @@ class github_graphql_interface():
             'org': org
         }
 
-        self.json = { 
-            'query' : self.query,
-            'variables' : self.params
-        }
-
-        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+        response = self.make_ql_request(self.query, self.params)
 
         if response.status_code == 200:
             return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
@@ -230,23 +241,29 @@ class github_graphql_interface():
             'repo': repo
         }
 
-        self.json = {
-            'query': self.query,
-            'variables': self.params
-        }
-
-        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+        response = self.make_ql_request(self.query, self.params)
 
         if response.status_code == 200:
             codeowners_contents = response.json()["data"]["repository"]["file"]["text"]
 
             codeowners = codeowners_contents.split("\n")
 
-            if codeowners[-1] == "":
-                codeowners.pop()
+            # Remove any empty strings from the list of codeowners
+
+            indexes_removed = 0
+
+            for i in range(0, len(codeowners)):
+                if codeowners[i - indexes_removed] == "":
+                    codeowners.pop(i - indexes_removed)
+                    indexes_removed += 1
 
             for i in range(len(codeowners)):
-                codeowners[i] = codeowners[i].split("/")[-1]
+                # If the codeowner contains a "/", it is a team and needs to be split from the organisation name.
+                # If there is no "/", it is a user and needs to have the @ symbol removed.
+                if "/" in codeowners[i]:
+                    codeowners[i] = codeowners[i].split("/")[-1]
+                else:
+                    codeowners[i] = codeowners[i].replace("@", "")
 
             return codeowners
         else:
@@ -283,15 +300,15 @@ class github_graphql_interface():
             'team_name': team_name
         }
 
-        self.json = {
-            'query': self.query,
-            'variables': self.params
-        }
-
-        response = requests.post(url=self.api_url, json=self.json, headers=self.headers)
+        response = self.make_ql_request(self.query, self.params)
 
         if response.status_code == 200:
-            return response.json()["data"]["organization"]["team"]["members"]["nodes"]
+            try:
+                return response.json()["data"]["organization"]["team"]["members"]["nodes"]
+            except TypeError:
+                # If the above raises a TypeError, it means that the team_name is not a team, but a user.
+                # Therefore we should return the team_name as a list.
+                return [{"login": team_name}]
         else:
             response_json = response.json()
             return response_json["message"], response_json["status"]

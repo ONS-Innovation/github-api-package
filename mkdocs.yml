@@ -6,6 +6,12 @@ repo_name: GitHub API Package
 nav:
   - Home: 'index.md'
   - Documentation: 'documentation.md'
+  - Reference:
+    - get_token_as_installation: 'reference/get_token_as_installation.md'
+    - github_interface: 'reference/github_interface.md'
+    - github_graphql_interface: 'reference/github_graphql_interface.md'
+  - Example Use Cases:
+    - Getting a Repository Owner: 'example_use_cases/getting_a_repository_owner.md'
   
 theme:
   name: material
@@ -58,3 +64,12 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
