@@ -12,12 +12,12 @@ A major use case for the GraphQL section of the toolkit, is to get a point of co
 
 3. The CODEOWNERS file can contain either an individual's username or a GitHub Team name and should be formatted as follows:
 
-```
-@organisation/team-name     # This is a GitHub Team
-@username                   # This is a GitHub User
-```
+    ```
+    @organisation/team-name     # This is a GitHub Team
+    @username                   # This is a GitHub User
+    ```
 
-Each CODEOWNER should be on a new line and no line should be left blank.
+    Each CODEOWNER should be on a new line and no line should be left blank.
 
 4. The GitHub Team within the CODEOWNERS file must have a member with the maintainer role. This person is identified as a repository owner from the team.
 
