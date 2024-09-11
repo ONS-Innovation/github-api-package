@@ -59,3 +59,5 @@ This project uses MkDocs for documentation which gets deployed to GitHub Pages a
 For more information about MkDocs, see the below documentation.
 
 [Getting Started with MkDocs](https://www.mkdocs.org/getting-started/)
+
+There is a guide to getting started on this repository's GitHub Pages site.
