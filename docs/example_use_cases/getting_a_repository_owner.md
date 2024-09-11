@@ -2,22 +2,15 @@
 
 ## Overview
 
-A major use case for the GraphQL section of the toolkit, is to get a point of contact for a given repository. This can be done using a combination of methods from the the `github_graphql_interface()` class.
+A major use case for the GraphQL section of the toolkit, is to get a point of contact for a given repository. This can be done using the `github_graphql_interface()` class.
 
 ## Prerequisites
 
 1. The GitHub organisation must have verified domain emails. Please see [this](https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization) GitHub Doc.
 
-2. The repository must contain a CODEOWNERS file at the **root** of the repository.
+2. The repository must contain a CODEOWNERS file at either the root of the repository, within a `.github` folder at the root of the repository or within a `/docs` folder at the root of the repository.
 
-3. The CODEOWNERS file can contain either an individual's username or a GitHub Team name and should be formatted as follows:
-
-    ```
-    @organisation/team-name     # This is a GitHub Team
-    @username                   # This is a GitHub User
-    ```
-
-    Each CODEOWNER should be on a new line and no line should be left blank.
+3. The CODEOWNERS file can contain a mixture of GitHub Teams and Usernames. Emails within a CODEOWNERS file are ignored.
 
 4. The GitHub Team within the CODEOWNERS file must have a member with the maintainer role. This person is identified as a repository owner from the team.
 
@@ -31,11 +24,7 @@ The following code snippet does the following:
 
 3. Create an instance of the GraphQL interface.
 
-4. Get the Teams/Users kept within the CODEOWNERS file of a given repository
-
-5. Get the maintainers for each team. If the team is a user, it will format the user to match.
-
-6. Iterate through the maintainers and print their username followed by their verified domain email.
+4. Run `get_repository_email_list()` to get a list of CODEOWNER emails for that repository.
 
 ```python
 import github_api_toolkit as gat
@@ -50,12 +39,7 @@ token = gat.get_token_as_installation(github_org, pem_contents, github_app_id)
 
 api = gat.github_graphql_interface(token[0])
 
-teams = api.get_codeowner_teams(github_org, github_repo)
+emails = api.get_repository_email_list(github_org, github_repo)
 
-for team in teams:
-    maintainers = api.get_team_maintainers(github_org, team)
-    print(f"Team: {team}")
-    print("Maintainers:")
-    for maintainer in maintainers:
-        print(f"{maintainer["login"]} - {api.get_domain_email_by_user(maintainer["login"], getenv("GITHUB_ORG"))}")
+print(emails)
 ```
