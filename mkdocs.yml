@@ -8,20 +8,8 @@ nav:
   - Documentation: 'documentation.md'
   - Reference:
     - get_token_as_installation: 'reference/get_token_as_installation.md'
-    - github_interface: 
-      - Summary: 'reference/github_interface.md'
-      - Methods:
-        - handle_response(): 'reference/rest_methods/handle_response.md'
-        - get(): 'reference/rest_methods/get.md'
-        - patch(): 'reference/rest_methods/patch.md'
-        - post(): 'reference/rest_methods/post.md'
-    - github_graphql_interface: 
-      - Summary: 'reference/github_graphql_interface.md'
-      - Methods:
-        - make_ql_request(): 'reference/graphql_methods/make_ql_request.md'
-        - get_domain_email_by_user(): 'reference/graphql_methods/get_domain_email_by_user.md'
-        - get_codeowner_teams(): 'reference/graphql_methods/get_codeowner_teams.md'
-        - get_team_maintainers(): 'reference/graphql_methods/get_team_maintainers.md'
+    - github_interface: 'reference/github_interface.md'
+    - github_graphql_interface: 'reference/github_graphql_interface.md'
   - Example Use Cases:
     - Getting a Repository Owner: 'example_use_cases/getting_a_repository_owner.md'
   
@@ -85,3 +73,8 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
