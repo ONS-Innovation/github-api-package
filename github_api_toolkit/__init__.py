@@ -163,6 +163,19 @@ class github_graphql_interface():
         self.headers = { "Authorization": "token " + token }
         self.api_url = "https://api.github.com/graphql"
 
+    def get_error_message(self, response: requests.Response) -> tuple:
+        """Gets the error message and status code from a response.
+
+        Args:
+            response (requests.Response): The response from the API endpoint.
+
+        Returns:
+            tuple: A tuple containing the error message and status code.
+        """
+
+        response_json = response.json()
+        return response_json.get("message", "No Error Message"), response_json.get("status", "Unknown status")
+
     def make_ql_request(self, query: str, params: dict) -> requests.Response:
         """Makes a request to the GitHub GraphQL API.
 
@@ -211,8 +224,7 @@ class github_graphql_interface():
         if response.status_code == 200:
             return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
         else:
-            response_json = response.json()
-            return response_json["message"], response_json["status"]
+            return self.get_error_message(response)
 
     def get_file_contents_from_repo(self, owner: str, repo: str, path: str, branch: str = "main") -> str:
         """Gets the contents of a file from a GitHub Repository.
@@ -255,8 +267,7 @@ class github_graphql_interface():
                 # Therefore, the file was not found
                 return "File not found."
         else:
-            response_json = response.json()
-            return response_json["message"], response_json["status"]
+            return self.get_error_message(response)
 
     def check_directory_for_file(self, owner: str, repo: str, path: str, branch: str) -> str | None:
         """Checks if a file exists in a repository.
@@ -450,8 +461,7 @@ class github_graphql_interface():
         if response.status_code == 200:
             return response.json()["data"]["organization"]["team"]["members"]["nodes"]
         else:
-            response_json = response.json()
-            return response_json["message"], response_json["status"]
+            return self.get_error_message(response)
         
     def get_codeowner_users(self, codeowners: list) -> list:
         """Gets a list of users from a list of users and teams. Will get the maintainers of any teams and add them as a user.
