@@ -52,6 +52,16 @@ deactivate
 
 Please view the MkDocs documentation for more information about the toolkit's classes and functions.
 
+## Testing
+
+This package uses pytest. To run the tests for the project, use:
+
+```bash
+pytest
+```
+
+All tests should pass.
+
 ## Documentation
 
 This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.
