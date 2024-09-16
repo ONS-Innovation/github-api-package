@@ -48,6 +48,20 @@ To deactivate the virtual environment, use:
 deactivate
 ```
 
+## Commands
+
+Please view the MkDocs documentation for more information about the toolkit's classes and functions.
+
+## Testing
+
+This package uses pytest. To run the tests for the project, use:
+
+```bash
+pytest
+```
+
+All tests should pass.
+
 ## Documentation
 
 This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.
@@ -55,3 +69,5 @@ This project uses MkDocs for documentation which gets deployed to GitHub Pages a
 For more information about MkDocs, see the below documentation.
 
 [Getting Started with MkDocs](https://www.mkdocs.org/getting-started/)
+
+There is a guide to getting started on this repository's GitHub Pages site.
