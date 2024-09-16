@@ -6,6 +6,7 @@ repo_name: GitHub API Package
 nav:
   - Home: 'index.md'
   - Documentation: 'documentation.md'
+  - Testing: 'testing.md'
   - Reference:
     - get_token_as_installation: 'reference/get_token_as_installation.md'
     - github_interface: 'reference/github_interface.md'
