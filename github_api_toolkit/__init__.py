@@ -467,6 +467,7 @@ class github_graphql_interface():
         """Gets a list of users from a list of users and teams. Will get the maintainers of any teams and add them as a user.
 
         Args:
+            org (str): The GitHub organization name.
             codeowners (list): A list of users and teams from a CODEOWNERS file.
 
         Returns:
