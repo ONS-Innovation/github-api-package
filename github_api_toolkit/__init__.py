@@ -463,7 +463,7 @@ class github_graphql_interface():
         else:
             return self.get_error_message(response)
         
-    def get_codeowner_users(self, codeowners: list) -> list:
+    def get_codeowner_users(self, org: str, codeowners: list) -> list:
         """Gets a list of users from a list of users and teams. Will get the maintainers of any teams and add them as a user.
 
         Args:
@@ -477,7 +477,7 @@ class github_graphql_interface():
 
         for codeowner in codeowners:
             if codeowner["type"] == "team":
-                team_maintainers = self.get_team_maintainers("ONSDigital", codeowner["name"])
+                team_maintainers = self.get_team_maintainers(org, codeowner["name"])
                 
                 for maintainer in team_maintainers:
                     users.append(maintainer["login"])
@@ -531,7 +531,7 @@ class github_graphql_interface():
 
         codeowners = self.identify_teams_and_users(codeowners)
 
-        codeowners = self.get_codeowner_users(codeowners)
+        codeowners = self.get_codeowner_users(org, codeowners)
 
         emails = self.get_codeowner_emails(codeowners, org)
 
