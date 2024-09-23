@@ -221,10 +221,15 @@ class github_graphql_interface():
 
         response = self.make_ql_request(self.query, self.params)
 
-        if response.status_code == 200:
-            return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
-        else:
+        if response.status_code != 200:
             return self.get_error_message(response)
+        
+        response_json = response.json()
+        
+        if "errors" in response_json:
+            return response_json["errors"][0].get("type", "No Error Type"), response_json["errors"][0].get("message", "No Error Message")
+        
+        return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
 
     def get_file_contents_from_repo(self, owner: str, repo: str, path: str, branch: str = "main") -> str:
         """Gets the contents of a file from a GitHub Repository.
@@ -258,16 +263,15 @@ class github_graphql_interface():
 
         response = self.make_ql_request(self.query, self.params)
 
-        if response.status_code == 200:
-            try:
-                contents = response.json()["data"]["repository"]["file"]["text"]
-                return contents
-            except TypeError:
-                # If there is a type error, ["data"]["repository"]["file"] is None
-                # Therefore, the file was not found
-                return "File not found."
-        else:
+        if response.status_code != 200:
             return self.get_error_message(response)
+        
+        try:
+            return response.json()["data"]["repository"]["file"]["text"]
+        except TypeError:
+            # If there is a type error, ["data"]["repository"]["file"] is None
+            # Therefore, the file was not found
+            return "File not found."
 
     def check_directory_for_file(self, owner: str, repo: str, path: str, branch: str) -> str | None:
         """Checks if a file exists in a repository.
@@ -458,10 +462,16 @@ class github_graphql_interface():
 
         response = self.make_ql_request(self.query, self.params)
 
-        if response.status_code == 200:
-            return response.json()["data"]["organization"]["team"]["members"]["nodes"]
-        else:
+        if response.status_code != 200:
             return self.get_error_message(response)
+        
+        try:
+            return response.json()["data"]["organization"]["team"]["members"]["nodes"]
+        except TypeError:
+            # If there is a type error, ["data"]["organization"]["team"]["members"]["nodes"] is None
+            # Therefore, the team was not found
+            # Return an empty list
+            return []
         
     def get_codeowner_users(self, org: str, codeowners: list) -> list:
         """Gets a list of users from a list of users and teams. Will get the maintainers of any teams and add them as a user.
