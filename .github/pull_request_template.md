@@ -1,38 +1,29 @@
-## What type of PR is this? (check all applicable)
+<!-- markdownlint-disable MD041 -->
+## Overview
 
-- [ ] Refactor
-- [ ] Feature
-- [ ] Bug Fix
-- [ ] Optimization
-- [ ] Documentation Update
+<!-- Provide an overview of the changes in this pull request -->
 
-### What
+## Testing
 
-Describe what you have changed and why.
+<!-- Describe how to test the changes in this pull request -->
 
-### Testing
+## Checklist
 
-Have any new tests been added as part of this issue? If not, try to explain why test coverage is not needed here.
+<!-- Please check off the following items before submitting this pull request -->
+<!-- If anything is not applicable, please explain why in the exemptions section -->
 
-- [ ] Yes
-- [ ] No
-Please write a brief description of why test coverage is not necessary here.
-- [ ] Not as part of this ticket. (Could be done at a later point)
+- [ ] I have reviewed the changes in this pull request
+- [ ] I have tested the changes locally
+- [ ] I have updated/created any relevant documentation
+- [ ] I have updated/created any relevant tests
+- [ ] I have added any necessary labels to this pull request
+- [ ] I have assigned myself to this pull request
+- [ ] I have assigned the appropriate reviewers to this pull request
 
-### Documentation
+### Exemptions
 
-Has any new documentation been written as part of this issue? We should try to keep documentation up to date 
-as new code is added, rather than leaving it for the future.
+<!-- If any of the above checklist items are not applicable, please explain why here -->
 
-- [ ] Yes
-- [ ] No
-Please write a brief description of why documentation is not necessary here.
-- [ ] Not as part of this ticket. (Could be done at a later point)
+## Additional Notes
 
-### Related issues
-
-Provide links to any related issues.
-
-### How to review
-
-Describe the steps required to test the changes.
+<!-- Add any additional notes or comments here -->

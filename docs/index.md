@@ -12,11 +12,11 @@ This package is primarily used by:
 
 For more information about the package's functionality, see the following pages:
 
-| Name                          | Type     | Description                                                                                                            | Link                                     |
-| ----------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- | :--------------------------------------: |
-| `get_token_as_installation()` | Function | A function which gets a GitHub Access Token for a given GitHub App. This allows authenticated API requests to be made. | [:link:](./reference/get_token_as_installation.md) |
-| `github_interface()`          | Class    | A class used to interact with GitHub's RESTful API.                                                                    | [:link:](./reference/github_interface.md)          |
-| `github_graphql_interface()`  | Class    | A class used to interact with GitHub's GraphQL API.                                                                    | [:link:](./reference/github_graphql_interface.md)  |
+| Name                          | Type     | Description                                                                                                            |                             Link                             |
+| ----------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------: |
+| `get_token_as_installation()` | Function | A function which gets a GitHub Access Token for a given GitHub App. This allows authenticated API requests to be made. | [Reference :link:](./reference/get_token_as_installation.md) |
+| `github_interface()`          | Class    | A class used to interact with GitHub's RESTful API.                                                                    |     [Reference :link:](./reference/github_interface.md)      |
+| `github_graphql_interface()`  | Class    | A class used to interact with GitHub's GraphQL API.                                                                    | [Reference :link:](./reference/github_graphql_interface.md)  |
 
 ## Techstack Overview
 

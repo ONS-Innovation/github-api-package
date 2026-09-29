@@ -8,9 +8,9 @@ The tests within this script involve testing `get_codeowners_from_text()` agains
 
 The test uses various CODEOWNER file formats, taken from real ONS repositories. For security reasons, all team and username have been removed. The test also includes GitHub's example CODEOWNERS file which showcases all the CODEOWNERS functionality (see below).
 
-Example taken from GitHub Docs ([link](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#example-of-a-codeowners-file)).
+Example taken from GitHub Docs ([Reference :link:](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#example-of-a-codeowners-file)).
 
-```
+```text
 # This is a comment.
 # Each line is a file pattern followed by one or more owners.
 
