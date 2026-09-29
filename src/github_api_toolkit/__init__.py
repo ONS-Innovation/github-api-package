@@ -1,9 +1,13 @@
-import jwt
-import time
-import requests
 import re
+import time
 
-def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -> tuple | Exception:
+import jwt
+import requests
+
+
+def get_token_as_installation(
+    org: str, pem_contents: str, app_client_id: str
+) -> tuple | Exception:
     """Get an access token for a GitHub App installed in an organization.
 
     Generates an encoded JSON Web Token (JWT) using the GitHub app client ID and the private key (pem_contents).
@@ -28,7 +32,7 @@ def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -
     try:
         signing_key = jwt.jwk_from_pem(pem_contents.encode())
     except jwt.exceptions.UnsupportedKeyTypeError as err:
-        return(err)
+        return err
 
     payload = {
         # Issued at time
@@ -36,7 +40,7 @@ def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -
         # Expiration time
         "exp": int(expiration_time),
         # Github App CLient ID
-        "iss": app_client_id
+        "iss": app_client_id,
     }
 
     jwt_instance = jwt.JWT()
@@ -44,9 +48,11 @@ def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -
 
     # Get Installation ID
     header = {"Authorization": f"Bearer {encoded_jwt}"}
-    
+
     try:
-        response = requests.get(url=f"https://api.github.com/orgs/{org}/installation", headers=header)
+        response = requests.get(
+            url=f"https://api.github.com/orgs/{org}/installation", headers=header
+        )
 
         response.raise_for_status()
 
@@ -54,33 +60,36 @@ def get_token_as_installation(org: str, pem_contents: str, app_client_id: str) -
         installation_id = installation_json["id"]
 
         # Get Access Token
-        response = requests.post(url=f"https://api.github.com/app/installations/{installation_id}/access_tokens", headers=header)
+        response = requests.post(
+            url=f"https://api.github.com/app/installations/{installation_id}/access_tokens",
+            headers=header,
+        )
         access_token = response.json()
         return (access_token["token"], access_token["expires_at"])
-    
-    except requests.exceptions.HTTPError as errh:
-        return(errh)
-    except requests.exceptions.ConnectionError as errc:
-        return(errc)
-    except requests.exceptions.Timeout as errt:
-        return(errt)
-    except requests.exceptions.RequestException as err:
-        return(err)
-    
 
-class github_interface():
+    except requests.exceptions.HTTPError as errh:
+        return errh
+    except requests.exceptions.ConnectionError as errc:
+        return errc
+    except requests.exceptions.Timeout as errt:
+        return errt
+    except requests.exceptions.RequestException as err:
+        return err
+
+
+class github_interface:
     """A class used to interact with the Github API.
 
     The class can perform authenticated get, patch and post requests to the GitHub API using the requests library.
     """
 
     def __init__(self, token: str) -> None:
-        """Creates the header attribute containing the Personal Access token to make auth'd API requests.
-        """
+        """Creates the header attribute containing the Personal Access token to make auth'd API requests."""
         self.headers = {"Authorization": "token " + token}
 
-
-    def handle_response(self, response: requests.Response) -> requests.Response | Exception:
+    def handle_response(
+        self, response: requests.Response
+    ) -> requests.Response | Exception:
         """Checks the passed response for errors and returns the response or an Exception object.
 
         Args:
@@ -95,72 +104,83 @@ class github_interface():
             response.raise_for_status()
             return response
         except requests.exceptions.HTTPError as errh:
-            return(errh)
+            return errh
         except requests.exceptions.ConnectionError as errc:
-            return(errc)
+            return errc
         except requests.exceptions.Timeout as errt:
-            return(errt)
+            return errt
         except requests.exceptions.RequestException as err:
-            return(err)
-        
+            return err
 
-    def get(self, url: str, params: dict = {}, add_prefix: bool = True) -> requests.Response | Exception:
+    def get(
+        self, url: str, params: dict | None = None, add_prefix: bool = True
+    ) -> requests.Response | Exception:
         """Performs a get request using the passed url.
 
-            Args:
-                url (str): The url endpoint of the request.
-                params (dict): A Dictionary containing any Query Parameters.
-                add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-                to the beginning of the passed url.
+        Args:
+            url (str): The url endpoint of the request.
+            params (dict | None = None): A Dictionary containing any Query Parameters.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
+            to the beginning of the passed url.
 
-            Returns:
-                The response from the API endpoint.
-                If an error occurs, an Exception object is returned to be handled by the importing program.
+        Returns:
+            The response from the API endpoint.
+            If an error occurs, an Exception object is returned to be handled by the importing program.
         """
         if add_prefix:
             url = "https://api.github.com" + url
-        return self.handle_response(requests.get(url=url, headers=self.headers, params=params))
-    
-    def patch(self, url: str, params: dict = {}, add_prefix: bool = True) -> requests.Response | Exception:
+        return self.handle_response(
+            requests.get(url=url, headers=self.headers, params=params)
+        )
+
+    def patch(
+        self, url: str, params: dict | None = None, add_prefix: bool = True
+    ) -> requests.Response | Exception:
         """Performs a patch request using the passed url.
 
-            Args:
-                url (str): The url endpoint of the request.
-                params (dict): A Dictionary containing any Query Parameters.
-                add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-                to the beginning of the passed url.
+        Args:
+            url (str): The url endpoint of the request.
+            params (dict | None = None): A Dictionary containing any Query Parameters.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
+            to the beginning of the passed url.
 
-            Returns:
-                The response from the API endpoint.
-                If an error occurs, an Exception object is returned to be handled by the importing program.
+        Returns:
+            The response from the API endpoint.
+            If an error occurs, an Exception object is returned to be handled by the importing program.
         """
         if add_prefix:
             url = "https://api.github.com" + url
-        return self.handle_response(requests.patch(url=url, headers=self.headers, json=params))
-    
-    def post(self, url: str, params: dict = {}, add_prefix: bool = True) -> requests.Response | Exception:
+        return self.handle_response(
+            requests.patch(url=url, headers=self.headers, json=params)
+        )
+
+    def post(
+        self, url: str, params: dict | None = None, add_prefix: bool = True
+    ) -> requests.Response | Exception:
         """Performs a post request using the passed url.
 
-            Args:
-                url (str): The url endpoint of the request.
-                params (dict): A Dictionary containing any Query Parameters.
-                add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-                to the beginning of the passed url.
+        Args:
+            url (str): The url endpoint of the request.
+            params (dict | None = None): A Dictionary containing any Query Parameters.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
+            to the beginning of the passed url.
 
-            Returns:
-                The response from the API endpoint.
-                If an error occurs, an Exception object is returned to be handled by the importing program.
+        Returns:
+            The response from the API endpoint.
+            If an error occurs, an Exception object is returned to be handled by the importing program.
         """
         if add_prefix:
             url = "https://api.github.com" + url
-        return self.handle_response(requests.post(url=url, headers=self.headers, json=params))
+        return self.handle_response(
+            requests.post(url=url, headers=self.headers, json=params)
+        )
 
-class github_graphql_interface():
-    """A class used to interact with the GitHub GraphQL API. Has a set range of functions.
-    """
-    
+
+class github_graphql_interface:
+    """A class used to interact with the GitHub GraphQL API. Has a set range of functions."""
+
     def __init__(self, token: str) -> None:
-        self.headers = { "Authorization": "token " + token }
+        self.headers = {"Authorization": "token " + token}
         self.api_url = "https://api.github.com/graphql"
 
     def get_error_message(self, response: requests.Response) -> tuple:
@@ -174,25 +194,28 @@ class github_graphql_interface():
         """
 
         response_json = response.json()
-        return response_json.get("message", "No Error Message"), response_json.get("status", "Unknown status")
+        return response_json.get("message", "No Error Message"), response_json.get(
+            "status", "Unknown status"
+        )
 
-    def make_ql_request(self, query: str, params: dict) -> requests.Response:
+    def make_ql_request(
+        self, query: str, params: dict | None = None
+    ) -> requests.Response:
         """Makes a request to the GitHub GraphQL API.
 
         Args:
             query (str): The GraphQL query to be executed.
-            params (dict): A dictionary containing the variables for the query.
+            params (dict | None = None): A dictionary containing the variables for the query.
 
         Returns:
             requests.Response: The response from the API endpoint.
         """
 
-        self.json = {
-            'query': query,
-            'variables': params
-        }
-
-        return requests.post(url=self.api_url, json=self.json, headers=self.headers)
+        return requests.post(
+            url=self.api_url,
+            json={"query": query, "variables": params or {}},
+            headers=self.headers,
+        )
 
     def get_domain_email_by_user(self, username: str, org: str) -> list | tuple:
         """Gets a GitHub user's verified domain email for a specific organization.
@@ -204,34 +227,35 @@ class github_graphql_interface():
         Returns:
             list | tuple: A list of verified domain emails for the user in the organization or a tuple containing an error message and status code.
         """
-        
-        self.query = '''
+
+        self.query = """
             query ($username: String!, $org: String!) {
                 user (login: $username) {
                     login
                     organizationVerifiedDomainEmails(login: $org)
                 }
             }
-        '''
+        """
 
-        self.params = {
-            'username': username,
-            'org': org
-        }
+        self.params = {"username": username, "org": org}
 
         response = self.make_ql_request(self.query, self.params)
 
         if response.status_code != 200:
             return self.get_error_message(response)
-        
+
         response_json = response.json()
-        
+
         if "errors" in response_json:
-            return response_json["errors"][0].get("type", "No Error Type"), response_json["errors"][0].get("message", "No Error Message")
-        
+            return response_json["errors"][0].get(
+                "type", "No Error Type"
+            ), response_json["errors"][0].get("message", "No Error Message")
+
         return response.json()["data"]["user"]["organizationVerifiedDomainEmails"]
 
-    def get_file_contents_from_repo(self, owner: str, repo: str, path: str, branch: str = "main") -> str:
+    def get_file_contents_from_repo(
+        self, owner: str, repo: str, path: str, branch: str = "main"
+    ) -> str | tuple:
         """Gets the contents of a file from a GitHub Repository.
 
         Args:
@@ -241,7 +265,7 @@ class github_graphql_interface():
             branch (str, optional): The branch the file is on. Defaults to "main".
 
         Returns:
-            str: The contents of the file.
+            str | tuple: The contents of the file, or an error message and status code.
         """
 
         self.query = f'''
@@ -256,16 +280,13 @@ class github_graphql_interface():
             }}
         '''
 
-        self.params = {
-            'owner': owner,
-            'repo': repo
-        }
+        self.params = {"owner": owner, "repo": repo}
 
         response = self.make_ql_request(self.query, self.params)
 
         if response.status_code != 200:
             return self.get_error_message(response)
-        
+
         try:
             return response.json()["data"]["repository"]["file"]["text"]
         except TypeError:
@@ -273,7 +294,9 @@ class github_graphql_interface():
             # Therefore, the file was not found
             return "File not found."
 
-    def check_directory_for_file(self, owner: str, repo: str, path: str, branch: str) -> str | None:
+    def check_directory_for_file(
+        self, owner: str, repo: str, path: str, branch: str
+    ) -> str | None:
         """Checks if a file exists in a repository.
 
         Args:
@@ -288,12 +311,14 @@ class github_graphql_interface():
 
         response = self.get_file_contents_from_repo(owner, repo, path, branch)
 
-        if response != "File not found.":
+        if isinstance(response, str) and response != "File not found.":
             return path
 
-        return
+        return None
 
-    def locate_codeowners_file(self, owner: str, repo: str, branch: str = "main") -> str | None:
+    def locate_codeowners_file(
+        self, owner: str, repo: str, branch: str = "main"
+    ) -> str | None:
         """Locates the CODEOWNERS file in a repository.
 
         The CODEOWNERS file can be located in the root of the repository, in the .github/ directory, or in the docs/ directory.
@@ -309,13 +334,19 @@ class github_graphql_interface():
         """
 
         # Check root directory
-        response_codeowners = self.check_directory_for_file(owner, repo, "CODEOWNERS", branch)
+        response_codeowners = self.check_directory_for_file(
+            owner, repo, "CODEOWNERS", branch
+        )
 
         # Check .github directory
-        response_github = self.check_directory_for_file(owner, repo, ".github/CODEOWNERS", branch)
+        response_github = self.check_directory_for_file(
+            owner, repo, ".github/CODEOWNERS", branch
+        )
 
         # Check docs directory
-        response_docs = self.check_directory_for_file(owner, repo, "docs/CODEOWNERS", branch)
+        response_docs = self.check_directory_for_file(
+            owner, repo, "docs/CODEOWNERS", branch
+        )
 
         if response_codeowners:
             return response_codeowners
@@ -324,7 +355,7 @@ class github_graphql_interface():
         elif response_docs:
             return response_docs
 
-        return
+        return None
 
     def get_codeowners_from_text(self, codeowners_content: str) -> list:
         """Gets a list of users and teams from a CODEOWNERS file.
@@ -353,19 +384,19 @@ class github_graphql_interface():
         for i in range(len(codeowner_lines)):
             # If line is empty, remove it
 
-            if codeowner_lines[i-lines_removed] == "":
-                codeowner_lines.pop(i-lines_removed)
-                lines_removed += 1
-            
-            # If whole line is a comment, remove it
-            elif codeowner_lines[i-lines_removed][0] == "#":
-                codeowner_lines.pop(i-lines_removed)
+            if (
+                codeowner_lines[i - lines_removed] == ""
+                or codeowner_lines[i - lines_removed][0] == "#"
+            ):
+                codeowner_lines.pop(i - lines_removed)
                 lines_removed += 1
 
             # If line has a comment, remove the comment
-            elif "#" in codeowner_lines[i-lines_removed]:
-                comment_index = codeowner_lines[i-lines_removed].find("#")
-                codeowner_lines[i-lines_removed] = codeowner_lines[i-lines_removed][:comment_index]
+            elif "#" in codeowner_lines[i - lines_removed]:
+                comment_index = codeowner_lines[i - lines_removed].find("#")
+                codeowner_lines[i - lines_removed] = codeowner_lines[i - lines_removed][
+                    :comment_index
+                ]
 
         codeowner_handles = []
 
@@ -381,20 +412,20 @@ class github_graphql_interface():
         # The function will grab the end of the emails (i.e. @example.com)
         # These emails need to be removed from the list of codeowner_handles
 
-        email_pattern = r'(@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})'
+        email_pattern = r"(@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})"
 
         lines_removed = 0
 
         for i in range(len(codeowner_handles)):
-            if len(re.findall(email_pattern, codeowner_handles[i-lines_removed])) > 0:
-                codeowner_handles.pop(i-lines_removed)
+            if len(re.findall(email_pattern, codeowner_handles[i - lines_removed])) > 0:
+                codeowner_handles.pop(i - lines_removed)
                 lines_removed += 1
 
         # Remove duplicates
         codeowner_handles = list(dict.fromkeys(codeowner_handles))
-        
+
         return codeowner_handles
-    
+
     def identify_teams_and_users(self, codeowners_list: list) -> list:
         """Iterates through a list of users and teams and identifies the type of each.
 
@@ -414,19 +445,13 @@ class github_graphql_interface():
 
                 codeowners_list[i] = codeowners_list[i].split("/")[-1]
 
-                team_and_user_list.append({
-                    "type": "team",
-                    "name": codeowners_list[i]
-                })
+                team_and_user_list.append({"type": "team", "name": codeowners_list[i]})
             else:
                 # This is a user
 
                 codeowners_list[i] = codeowners_list[i].replace("@", "")
 
-                team_and_user_list.append({
-                    "type": "user",
-                    "name": codeowners_list[i]
-                })
+                team_and_user_list.append({"type": "user", "name": codeowners_list[i]})
 
         return team_and_user_list
 
@@ -441,7 +466,7 @@ class github_graphql_interface():
             list | tuple: A list of maintainers in the team or a tuple containing an error message and status code.
         """
 
-        self.query = '''
+        self.query = """
             query ($org: String!, $team_name: String!) {
                 organization(login: $org) {
                     team(slug: $team_name) {
@@ -453,18 +478,15 @@ class github_graphql_interface():
                     }
                 }
             }
-        '''
+        """
 
-        self.params = {
-            'org': org,
-            'team_name': team_name
-        }
+        self.params = {"org": org, "team_name": team_name}
 
         response = self.make_ql_request(self.query, self.params)
 
         if response.status_code != 200:
             return self.get_error_message(response)
-        
+
         try:
             return response.json()["data"]["organization"]["team"]["members"]["nodes"]
         except TypeError:
@@ -472,7 +494,7 @@ class github_graphql_interface():
             # Therefore, the team was not found
             # Return an empty list
             return []
-        
+
     def get_codeowner_users(self, org: str, codeowners: list) -> list:
         """Gets a list of users from a list of users and teams. Will get the maintainers of any teams and add them as a user.
 
@@ -489,7 +511,7 @@ class github_graphql_interface():
         for codeowner in codeowners:
             if codeowner["type"] == "team":
                 team_maintainers = self.get_team_maintainers(org, codeowner["name"])
-                
+
                 for maintainer in team_maintainers:
                     users.append(maintainer["login"])
 
@@ -500,7 +522,7 @@ class github_graphql_interface():
         users = list(dict.fromkeys(users))
 
         return users
-    
+
     def get_codeowner_emails(self, codeowners: list, org: str) -> list:
         """Gets a list of verified domain emails for a list of users.
 
@@ -511,18 +533,18 @@ class github_graphql_interface():
         Returns:
             list: A list of verified domain emails for the users.
         """
-        
-        emails = []
+
+        emails: list[str] = []
 
         for codeowner in codeowners:
             user_emails = self.get_domain_email_by_user(codeowner, org)
-
-            for email in user_emails:
-                emails.append(email)
+            emails.extend(user_emails)
 
         return emails
-    
-    def get_repository_email_list(self, org: str, repo: str, branch: str = "main") -> list:
+
+    def get_repository_email_list(
+        self, org: str, repo: str, branch: str = "main"
+    ) -> list:
         """Gets a list of verified domain emails for the codeowners of a repository.
 
         Args:
@@ -535,8 +557,12 @@ class github_graphql_interface():
         """
 
         codeowners_path = self.locate_codeowners_file(org, repo, branch)
+        if codeowners_path is None:
+            return []
 
-        contents = self.get_file_contents_from_repo(org, repo, codeowners_path)
+        contents = self.get_file_contents_from_repo(org, repo, codeowners_path, branch)
+        if isinstance(contents, tuple):
+            raise TypeError(f"Expected CODEOWNERS text, got API error: {contents}")
 
         codeowners = self.get_codeowners_from_text(contents)
 

@@ -6,6 +6,7 @@ import github_api_toolkit
 
 ql = github_api_toolkit.github_graphql_interface("test_token")
 
+
 def test_codeowners_format_a():
     codeowners = """
     schemas/* @organisation/team-a @organisation/team-b @organisation/team-c @organisation/team-d
@@ -18,10 +19,11 @@ def test_codeowners_format_a():
         "@organisation/team-a",
         "@organisation/team-b",
         "@organisation/team-c",
-        "@organisation/team-d"
+        "@organisation/team-d",
     ]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_b():
     codeowners = """
@@ -32,11 +34,10 @@ def test_codeowners_format_b():
     docs/survey_data_exchange_to_respondent_account_services.rst @organisation/team-a
     """
 
-    excepted_output = [
-        "@organisation/team-a"
-    ]
+    excepted_output = ["@organisation/team-a"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_c():
     codeowners = """
@@ -49,24 +50,20 @@ def test_codeowners_format_c():
     proxy.config.*.json @organisation/team-b
     """
 
-    excepted_output = [
-        "@organisation/team-a",
-        "@organisation/team-b"
-    ]
+    excepted_output = ["@organisation/team-a", "@organisation/team-b"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_d():
     codeowners = """
     *   @organisation/team-a @organisation/team-b
     """
 
-    excepted_output = [
-        "@organisation/team-a",
-        "@organisation/team-b"
-    ]
+    excepted_output = ["@organisation/team-a", "@organisation/team-b"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_e():
     codeowners = """
@@ -75,12 +72,10 @@ def test_codeowners_format_e():
     users.yml @organisation/team-a @organisation/team-b
     """
 
-    excepted_output = [
-        "@organisation/team-a",
-        "@organisation/team-b"
-    ]
+    excepted_output = ["@organisation/team-a", "@organisation/team-b"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_f():
     codeowners = """
@@ -89,11 +84,10 @@ def test_codeowners_format_f():
     * @organisation/team-a
     """
 
-    excepted_output = [
-        "@organisation/team-a"
-    ]
+    excepted_output = ["@organisation/team-a"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_g():
     codeowners = """
@@ -101,12 +95,10 @@ def test_codeowners_format_g():
     * @user-a @user-b
     """
 
-    excepted_output = [
-        "@user-a",
-        "@user-b"
-    ]
+    excepted_output = ["@user-a", "@user-b"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_h():
     codeowners = """
@@ -114,11 +106,10 @@ def test_codeowners_format_h():
     *       @organisation/team-a
     """
 
-    excepted_output = [
-        "@organisation/team-a"
-    ]
+    excepted_output = ["@organisation/team-a"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_i():
     codeowners = """
@@ -127,12 +118,10 @@ def test_codeowners_format_i():
     *       @user-b
     """
 
-    excepted_output = [
-        "@user-a",
-        "@user-b"
-    ]
+    excepted_output = ["@user-a", "@user-b"]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output
+
 
 def test_codeowners_format_j():
     codeowners = """
@@ -209,7 +198,7 @@ def test_codeowners_format_j():
         "@js-owner",
         "@octo-org/octocats",
         "@doctocat",
-        "@octocat"
+        "@octocat",
     ]
 
     assert ql.get_codeowners_from_text(codeowners) == excepted_output

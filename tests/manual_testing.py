@@ -10,23 +10,36 @@ To run this file, you will need to set the following environment variables:
 Note: Changes to this file should **not** be committed to the repository.
 """
 
-from github_api_toolkit import get_token_as_installation, github_interface, github_graphql_interface
-
 from os import getenv
-from pprint import pprint  # noqa: F401 - Unused import, but useful to keep for testing purposes.
+from pprint import (
+    pprint,  # noqa: F401 - Unused import, but useful to keep for testing purposes.
+)
+
+from github_api_toolkit import (
+    get_token_as_installation,
+    github_graphql_interface,
+    github_interface,
+)
 
 # Test Access Token Generation
 
 client_id = getenv("GITHUB_CLIENT_ID")
 private_key = getenv("GITHUB_PRIVATE_KEY")
-organisation = str(getenv("GITHUB_ORGANISATION"))
+organisation = getenv("GITHUB_ORGANISATION")
+
+if client_id is None or private_key is None or organisation is None:
+    raise ValueError(
+        "GITHUB_CLIENT_ID, GITHUB_PRIVATE_KEY and GITHUB_ORGANISATION must be set."
+    )
 
 token_response = get_token_as_installation(organisation, private_key, client_id)
 
 if isinstance(token_response, tuple):
     token = token_response[0]
 else:
-    raise ValueError("Failed to obtain GitHub App installation token. Please check your environment variables and GitHub App configuration.")
+    raise TypeError(
+        "Failed to obtain GitHub App installation token. Please check your environment variables and GitHub App configuration."
+    )
 
 rest = github_interface(token)
 ql = github_graphql_interface(token)
