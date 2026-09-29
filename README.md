@@ -1,112 +1,23 @@
 # GitHub API Package
 
-A Python package used to interact with the GitHub RESTful API.
-
-## Installation
-
-This package can be installed using the GitHub repository URL.
-
-### PIP
-
-```bash
-pip install git+https://github.com/ONS-Innovation/code-github-api-package.git
-```
-
-### Poetry
-
-```bash
-poetry add git+https://github.com/ONS-Innovation/code-github-api-package.git
-```
-
-## Usage
-
-This package can be imported as a normal Python package.
-
-Import whole module:
-
-```python
-import github_api_toolkit
-```
-
-Import part of the module:
-
-```python
-from github_api_toolkit import github_interface
-```
-
-## Development
-
-This project uses pip for package management. Poetry was avoided to keep the package size small.
-
-To develop/test the project locally, clone the repository then navigate to its root directory and run the following:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-This will create a virtual environment, activate it and install all the project dependancies into it.
-
-To deactivate the virtual environment, use:
-
-```bash
-deactivate
-```
-
-## Commands
-
-Please view the MkDocs documentation for more information about the toolkit's classes and functions.
-
-## Testing
-
-This package uses pytest. To run the tests for the project, use:
-
-```bash
-pytest
-```
-
-All tests should pass.
-
-## Documentation
-
-This project uses MkDocs for documentation which gets deployed to GitHub Pages at a repository level.
-
-For more information about MkDocs, see the below documentation.
-
-[Getting Started with MkDocs](https://www.mkdocs.org/getting-started/)
-
-There is a guide to getting started on this repository's GitHub Pages site.
-
-# GitHub API Package
-
 Python module for interacting with the GitHub RESTful and GraphQL APIs.
 
 ## Table of Contents
 
 - [GitHub API Package](#github-api-package)
-  - [Installation](#installation)
-    - [PIP](#pip)
-    - [Poetry](#poetry)
-  - [Usage](#usage)
-  - [Development](#development)
-  - [Commands](#commands)
-  - [Testing](#testing)
-  - [Documentation](#documentation)
-- [GitHub API Package](#github-api-package-1)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Makefile](#makefile)
   - [Using the Package](#using-the-package)
     - [GitHub App Setup](#github-app-setup)
     - [End User Instructions](#end-user-instructions)
-      - [Installation](#installation-1)
-      - [Usage](#usage-1)
+      - [Installation](#installation)
+      - [Usage](#usage)
       - [Error Handling](#error-handling)
     - [Developer Instructions](#developer-instructions)
   - [Package Structure](#package-structure)
   - [Deployment](#deployment)
-  - [Documentation](#documentation-1)
+  - [Documentation](#documentation)
     - [GitHub Actions for Documentation](#github-actions-for-documentation)
     - [Local Development of Documentation](#local-development-of-documentation)
   - [Linting and Testing](#linting-and-testing)
@@ -208,6 +119,8 @@ response = ql.make_ql_request(
     variables=variables
 )
 ```
+
+A full reference for the toolkit can be found in `/docs`.
 
 #### Error Handling
 
