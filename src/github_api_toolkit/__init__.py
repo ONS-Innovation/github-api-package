@@ -29,11 +29,6 @@ def get_token_as_installation(
     issue_time = time.time()
     expiration_time = issue_time + 600
 
-    try:
-        signing_key = jwt.jwk_from_pem(pem_contents.encode())
-    except jwt.exceptions.UnsupportedKeyTypeError as err:
-        return err
-
     payload = {
         # Issued at time
         "iat": int(issue_time),
@@ -43,8 +38,10 @@ def get_token_as_installation(
         "iss": app_client_id,
     }
 
-    jwt_instance = jwt.JWT()
-    encoded_jwt = jwt_instance.encode(payload, signing_key, alg="RS256")
+    try:
+        encoded_jwt = jwt.encode(payload, pem_contents, algorithm="RS256")
+    except jwt.exceptions.InvalidKeyError as err:
+        return err
 
     # Get Installation ID
     header = {"Authorization": f"Bearer {encoded_jwt}"}
