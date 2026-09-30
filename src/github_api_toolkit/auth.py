@@ -60,6 +60,7 @@ def get_token_as_installation(
             url=f"https://api.github.com/app/installations/{installation_id}/access_tokens",
             headers=header,
         )
+        response.raise_for_status()
         access_token = response.json()
         return (access_token["token"], access_token["expires_at"])
 
