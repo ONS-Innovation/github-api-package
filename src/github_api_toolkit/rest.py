@@ -44,8 +44,7 @@ class github_interface:
         Args:
             url (str): The url endpoint of the request.
             params (dict | None = None): A Dictionary containing any Query Parameters.
-            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-            to the beginning of the passed url.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix to the beginning of the passed url.
 
         Returns:
             The response from the API endpoint.
@@ -65,8 +64,7 @@ class github_interface:
         Args:
             url (str): The url endpoint of the request.
             params (dict | None = None): A Dictionary containing any Query Parameters.
-            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-            to the beginning of the passed url.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix to the beginning of the passed url.
 
         Returns:
             The response from the API endpoint.
@@ -86,8 +84,7 @@ class github_interface:
         Args:
             url (str): The url endpoint of the request.
             params (dict | None = None): A Dictionary containing any Query Parameters.
-            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix
-            to the beginning of the passed url.
+            add_prefix (bool): A Boolean determining whether to add the "https://api.github.com" prefix to the beginning of the passed url.
 
         Returns:
             The response from the API endpoint.

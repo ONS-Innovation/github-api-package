@@ -79,9 +79,11 @@ poetry add git+https://github.com/ONS-Innovation/github-api-package@<version>
 Then, in your Python code, you can import the relevant modules and functions:
 
 ```python
-from github_api_package import get_token_as_installation
-from github_api_package import github_interface # REST API Client
-from github_api_package import github_graphql_interface # GraphQL API Client
+from github_api_toolkit import (
+    get_token_as_installation,
+    github_graphql_interface, # GraphQL API client
+    github_interface, # REST API client
+)
 
 # Get credentials for GitHub App
 # Note: This is only an example. Do NOT hardcode credentials in your code.
@@ -91,7 +93,12 @@ client_id = "<github_app_client_id>"
 private_key = "<github_app_private_key_in_pem_format>"
 
 # Generate a GitHub App installation token
-token = get_token_as_installation(org, private_key, client_id)
+token_response = get_token_as_installation(org, private_key, client_id)
+
+if isinstance(token_response, Exception):
+    raise token_response
+
+token, expires_at = token_response
 
 # Initialise the GitHub API clients
 rest = github_interface(token)
@@ -116,7 +123,7 @@ variables = {}
 
 response = ql.make_ql_request(
     query=query,
-    variables=variables
+    params=variables,
 )
 ```
 
@@ -155,8 +162,11 @@ This `make` target will install the development dependencies and the poetry-dyna
 
 ```text
 src/
-  └── github_api_package/
-      └── __init__.py     # File containing the main implementation of the github_api_package
+  └── github_api_toolkit/
+      ├── __init__.py  # Public package exports
+      ├── auth.py      # GitHub App token generation
+      ├── graphql.py   # GraphQL API client
+      └── rest.py      # REST API client
 ```
 
 ## Deployment
