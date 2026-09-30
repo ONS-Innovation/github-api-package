@@ -1,0 +1,53 @@
+---
+name: Documentation CI
+on:
+  push:
+    branches: [main]
+    paths: ["**/*.md"]
+  pull_request:
+    branches: [main]
+    paths: ["**/*.md"]
+permissions:
+  contents: read
+jobs:
+  lint-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # V4.3.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # V5
+        with:
+          node-version: "20"
+      - name: Install markdownlint
+        run: |
+          npm install -g markdownlint-cli
+      - name: Run markdownlint
+        run: |
+          markdownlint **/*.md
+  verify-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # V4.3.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # V5.6.0
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # V4.3.0
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install poetry
+      - run: poetry config virtualenvs.create false
+      - run: poetry install --only docs
+      - run: mkdocs build

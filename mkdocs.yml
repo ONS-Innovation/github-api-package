@@ -1,23 +1,20 @@
+---
 site_name: GitHub API Package
-
+site_description: Python module for interacting with the GitHub API.
 repo_url: https://github.com/ONS-Innovation/github-api-package
-repo_name: GitHub API Package
-
+repo_name: github-api-package
 nav:
-  - Home: 'index.md'
-  - Documentation: 'documentation.md'
-  - Testing: 'testing.md'
+  - Home: "index.md"
+  - Documentation: "documentation.md"
   - Reference:
-    - get_token_as_installation: 'reference/get_token_as_installation.md'
-    - github_interface: 'reference/github_interface.md'
-    - github_graphql_interface: 'reference/github_graphql_interface.md'
+      - get_token_as_installation: "reference/get_token_as_installation.md"
+      - github_interface: "reference/github_interface.md"
+      - github_graphql_interface: "reference/github_graphql_interface.md"
   - Example Use Cases:
-    - Getting a Repository Owner: 'example_use_cases/getting_a_repository_owner.md'
-  
+      - Getting a Repository Owner: "example_use_cases/getting_a_repository_owner.md"
 theme:
   name: material
   language: en
-
   palette:
     # toggle for light mode
     - media: "(prefers-color-scheme: light)"
@@ -36,27 +33,19 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to system preference
-
   features:
     - navigation.tracking
     - navigation.sections
     - navigation.path
     - navigation.top
     - navigation.footer
-
     - search.suggest
-
     - header.autohide
     - content.code.copy
-
-  
-
   logo: assets/logo.png
   favicon: assets/favicon.ico
-
   icon:
     repo: fontawesome/brands/github
-
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -74,7 +63,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
 plugins:
   - search
   - mkdocstrings:
