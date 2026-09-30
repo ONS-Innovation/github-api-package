@@ -11,11 +11,11 @@ def test_github_interface_requests_and_prefix_options():
     response = Mock()
 
     with (
-        patch("github_api_toolkit.requests.get", return_value=response) as get,
+        patch("github_api_toolkit.rest.requests.get", return_value=response) as get,
         patch(
-            "github_api_toolkit.requests.patch", return_value=response
+            "github_api_toolkit.rest.requests.patch", return_value=response
         ) as patch_request,
-        patch("github_api_toolkit.requests.post", return_value=response) as post,
+        patch("github_api_toolkit.rest.requests.post", return_value=response) as post,
     ):
         assert client.get("/repos", {"page": 1}) is response
         assert client.get("https://example.test/repos", add_prefix=False) is response

@@ -17,7 +17,9 @@ def test_graphql_interface_error_message_and_request_defaults():
     ) == ("denied", "403")
 
     response = Mock()
-    with patch("github_api_toolkit.requests.post", return_value=response) as post:
+    with patch(
+        "github_api_toolkit.graphql.requests.post", return_value=response
+    ) as post:
         assert client.make_ql_request("query { viewer { login } }") is response
         assert client.make_ql_request("query", {"login": "octocat"}) is response
 

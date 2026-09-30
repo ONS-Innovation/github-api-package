@@ -26,9 +26,12 @@ def test_get_token_as_installation_signs_with_pyjwt():
 
     with (
         patch(
-            "github_api_toolkit.requests.get", return_value=installation_response
+            "github_api_toolkit.auth.requests.get", return_value=installation_response
         ) as get_request,
-        patch("github_api_toolkit.requests.post", return_value=access_token_response),
+        patch(
+            "github_api_toolkit.auth.requests.post",
+            return_value=access_token_response,
+        ),
     ):
         result = github_api_toolkit.get_token_as_installation(
             "example-org", pem_contents, "client-id"
@@ -45,8 +48,8 @@ def test_get_token_as_installation_signs_with_pyjwt():
 
 def test_get_token_as_installation_returns_invalid_key_error():
     with (
-        patch("github_api_toolkit.requests.get") as get_request,
-        patch("github_api_toolkit.requests.post") as post_request,
+        patch("github_api_toolkit.auth.requests.get") as get_request,
+        patch("github_api_toolkit.auth.requests.post") as post_request,
     ):
         result = github_api_toolkit.get_token_as_installation(
             "example-org", "not a valid PEM key", "client-id"
@@ -78,8 +81,8 @@ def test_get_token_as_installation_returns_request_errors(exception_type):
     response.raise_for_status.side_effect = error
 
     with (
-        patch("github_api_toolkit.requests.get", return_value=response),
-        patch("github_api_toolkit.requests.post") as post_request,
+        patch("github_api_toolkit.auth.requests.get", return_value=response),
+        patch("github_api_toolkit.auth.requests.post") as post_request,
     ):
         result = github_api_toolkit.get_token_as_installation(
             "example-org", pem_contents, "client-id"
